@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>高考志愿顺序调整工具</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">CSV 在线调整 · 本地处理不上传</p>
+      <h1>高考志愿顺序调整工具</h1>
+      <p class="lead">在已经确定全部志愿的前提下，按专业喜好微调顺序；“不参与排序”的专业会按原顺序固定置顶，导出格式与导入 CSV 保持一致。</p>
+    </div>
+    <label class="upload-card" for="csvFile">
+      <span>选择 CSV 文件</span>
+      <small>支持含逗号引号的标准 CSV</small>
+      <input id="csvFile" type="file" accept=".csv,text/csv" />
+    </label>
+  </header>
+
+  <main>
+    <section class="panel controls" aria-label="调整控制区">
+      <div>
+        <h2>调整策略</h2>
+        <p>建议只在相近位次区间内移动，避免因过度追求喜好而把安全性更高的志愿放得过低。</p>
+      </div>
+      <div class="control-grid">
+        <label>最大建议移动幅度
+          <input id="safeWindow" type="range" min="1" max="20" value="5" />
+          <output id="safeWindowValue">5 位</output>
+        </label>
+        <button id="resetBtn" type="button" disabled>恢复导入顺序</button>
+        <button id="exportBtn" type="button" disabled>导出调整后 CSV</button>
+      </div>
+    </section>
+
+    <section id="summary" class="summary" aria-live="polite"></section>
+
+    <section class="lists">
+      <div class="panel">
+        <h2>固定置顶（不参与排序）</h2>
+        <p class="hint">这些志愿会保持导入时的相对顺序，并始终置于导出文件顶部。</p>
+        <div id="pinnedList" class="preference-list empty">请先上传 CSV</div>
+      </div>
+
+      <div class="panel sortable-panel">
+        <div class="section-title">
+          <div>
+            <h2>可调整志愿</h2>
+            <p class="hint">拖拽卡片或使用上下按钮调整。超出建议幅度会显示提醒，但不会阻止导出。</p>
+          </div>
+          <div class="legend"><span class="dot safe"></span>建议范围内 <span class="dot warn"></span>移动较大</div>
+        </div>
+        <div id="sortableList" class="preference-list empty">请先上传 CSV</div>
+      </div>
+    </section>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card" draggable="true">
+      <div class="drag-handle" aria-hidden="true">☰</div>
+      <div class="card-main">
+        <div class="card-title"></div>
+        <div class="card-meta"></div>
+        <div class="move-note"></div>
+      </div>
+      <div class="card-actions">
+        <button type="button" class="up" aria-label="上移">↑</button>
+        <button type="button" class="down" aria-label="下移">↓</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
